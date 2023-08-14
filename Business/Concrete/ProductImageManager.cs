@@ -27,18 +27,11 @@ namespace Business.Concrete
             _productImageDal = productImageDal;
         }
 
-
         [CacheRemoveAspect("IProductImageService.Get")]
         [SecuredOperation("admin")]
         [ValidationAspect(typeof(ProductImageValidator))]
         public IResult Add(IFormFile image, ProductImage productImage)
         {
-            //var ruleResult = BusinessRules.Run(CheckImageLimitExceeded(productImage.ProductId));
-            //if (!ruleResult.Success)
-            //{
-            //    return new ErrorResult(ruleResult.Message);
-            //}
-
             var imageResult = FileHelper.Add(image);
             productImage.ImagePath = imageResult.Message;
             if (!imageResult.Success)
@@ -48,7 +41,6 @@ namespace Business.Concrete
             _productImageDal.Add(productImage);
             return new SuccessResult(Messages.ProductImageAdded);
         }
-
 
         [SecuredOperation("admin")]
         [ValidationAspect(typeof(ProductImageValidator))]
